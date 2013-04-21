@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 stati_http.example
-~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
 
 
 :copyright: (c) 2012 - 2013 by GottWall team, see AUTHORS for more details.
