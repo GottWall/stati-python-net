@@ -12,17 +12,18 @@ stati_http.example
 
 from stati_http import HTTPClient
 
-private_key = "gottwall_privatekey"
-public_key = "project_public_key"
-project = "test_gottwall_project"
+private_key = "dwefwefwefwecwef"
+public_key = "my_public_key"
+project = "test_project"
 
-host = "http://127.0.0.1/"
+host = "http://127.0.0.1:8890"
 
 cli = HTTPClient(
     private_key=private_key,
     public_key=public_key,
-    project=project, db=2,
+    project=project,
     host=host,
     prefix=None)
 
-cli.incr(metric="orders", value=2, filters={"current_status": "Completed"})
+for x in xrange(10):
+    cli.incr(name="orders", value=2, filters={"current_status": "Completed"})

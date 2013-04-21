@@ -56,7 +56,7 @@ class HTTPClient(Client):
     """
 
     def __init__(self, project, private_key, public_key,
-                 host='http://127.0.0.1/', prefix='gottwall'):
+                 host='http://127.0.0.1/', prefix='/gottwall'):
         super(HTTPClient, self).__init__(project, private_key, public_key)
         self._host = host
         self.prefix = prefix
@@ -64,14 +64,14 @@ class HTTPClient(Client):
     def get_url(self, action):
         return "{host}{prefix}/api/v1/{project}/{action}".format(
             action=action, project=self._project,
-            prefix=self.prefix,
+            prefix=self.prefix if self.prefix else '',
             host = self._host)
 
     @property
     def headers(self):
         return {"Content-Type": "application/json",
                 "X-GottWall-Auth": "GottWall private_key={0}, public_key={1}".format(
-                    self.private_key, self.public_key)}
+                    self._private_key, self._public_key)}
 
     def incr(self, name, timestamp=None, value=1, filters={}):
         timestamp = timestamp or datetime.datetime.now()
