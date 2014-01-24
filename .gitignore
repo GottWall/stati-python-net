@@ -25,3 +25,5 @@ pip-log.txt
 dist/*
 _build/*
 build/*
+.DS_Store
+*.egg

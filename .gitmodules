@@ -1,3 +1,0 @@
-[submodule "buildenv"]
-	path = buildenv
-	url = https://github.com/Lispython/buildenv.sh.git
