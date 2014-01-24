@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 """
-stati-http-python
-~~~~~~~~~~~~~~~~~~
+stati-python-net
+~~~~~~~~~~~~~~~~~
 
-Python client with http transport for GottWall statistics aggregator
+Python client with  HTTP & UDP & TCP/IP transports for GottWall statistics aggregator
 
-:copyright: (c) 2012 - 2013 by GottWall team, see AUTHORS for more details.
+:copyright: (c) 2012 - 2014 by GottWall team, see AUTHORS for more details.
 :license: BSD, see LICENSE for more details.
-:github: http://github.com/GottWall/stati-http-python
+:github: http://github.com/GottWall/stati-python-net
 """
 
 
@@ -40,20 +40,19 @@ is_py3 = (py_ver[0] == 3)
 
 tests_require = []
 
-install_requires = [
-    "requests"]
+install_requires = ["requests"]
 
 setup(
-    name="stati-http",
+    name="stati-net",
     version=VERSION,
-    description="Python client with HTTP transport for GottWall statistics aggregator",
+    description="Python client with HTTP & UDP & TCP/IP transports for GottWall statistics aggregator",
     long_description=readme_content,
     author="Alex Lispython",
     author_email="alex@obout.ru",
     maintainer="Alexandr Lispython",
     maintainer_email="alex@obout.ru",
-    url="https://github.com/GottWall/stati-http-python",
-    packages=["stati_http"],
+    url="https://github.com/GottWall/stati-python-net",
+    packages=["stati_net"],
     install_requires=install_requires,
     tests_require=tests_require,
     license="BSD",

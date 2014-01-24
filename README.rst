@@ -1,21 +1,21 @@
-Welcome to stati-http-python's documentation!
-==============================================
+Welcome to stati-python-net's documentation!
+===========================================
 
-stati-http is a python client with http transport for `GottWall metrics aggregation platform <http://github.com/GottWall/GottWall>`_
+stati-python-net is a python client with HTTP & UDP & TCP/IP  transports for `GottWall metrics aggregation platform <http://github.com/GottWall/GottWall>`_
 
-.. image:: https://secure.travis-ci.org/GottWall/stati-http-python.png
-	   :target: https://secure.travis-ci.org/GottWall/stati-http-python
+.. image:: https://secure.travis-ci.org/GottWall/stati-python-net.png
+	   :target: https://secure.travis-ci.org/GottWall/stati-python-net
 
 INSTALLATION
 ------------
 
 To use gottwall  use `pip` or `easy_install`:
 
-``pip install stati-http``
+``pip install stati-net``
 
 or
 
-``easy_install stati-http``
+``easy_install stati-net``
 
 
 USAGE
@@ -24,7 +24,7 @@ USAGE
 
 .. sourcecode:: python
 
-   from stati_http import HTTPClient
+   from stati_net import HTTPClient
 
    private_key = "gottwall_privatekey"
    public_key = "project_public_key"
@@ -43,9 +43,15 @@ USAGE
 
 
 
-
 CONTRIBUTE
 ----------
 
-Fork https://github.com/GottWall/stati-http-python/ , create commit and pull request.
+We need you help.
 
+#. Check for open issues or open a fresh issue to start a discussion around a feature idea or a bug.
+   There is a Contributor Friendly tag for issues that should be ideal for people who are not very familiar with the codebase yet.
+#. Fork `the repository`_ on Github to start making your changes to the **develop** branch (or branch off of it).
+#. Write a test which shows that the bug was fixed or that the feature works as expected.
+#. Send a pull request and bug the maintainer until it gets merged and published.
+
+.. _`the repository`: https://github.com/GottWall/stati-python-net/
