@@ -24,8 +24,7 @@ class HTTPClient(Client):
     """
 
     def __init__(self, project, private_key, public_key,
-                 host='http://127.0.0.1', prefix='/gottwall',
-                 port=80):
+                 host='http://127.0.0.1', prefix='/gottwall', port=80):
         super(HTTPClient, self).__init__(project, private_key, public_key)
         self._host = host
         self._port = port
@@ -59,7 +58,7 @@ class HTTPClient(Client):
         try:
             return requests.post(self.get_url(action), data=self.serialize(name, timestamp, value, filters),
                                  headers=self.headers).status_code == requests.codes.ok
-        except Exception, e:
+        except Exception as e:
             logger.error(e)
             return False
         return True
