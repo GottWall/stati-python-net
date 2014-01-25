@@ -39,7 +39,7 @@ USAGE
        host=host,
        prefix=None)
 
-   cli.incr(metric="orders", value=2, filters={"current_status": "Completed"})
+   cli.incr(metric="orders", value=2, filters={"status": ["Completed", "Waiting"]})
 
 
 
