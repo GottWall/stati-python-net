@@ -1,6 +1,6 @@
 include *.txt *.md *.rst Makefile *.py
-recursive-include stati *.py
-recursive-exclude stati *.pyo *.pyc
+recursive-include stati_net *.py
+recursive-exclude stati_net *.pyo *.pyc
 recursive-include docs *.txt *.py *.rst *.md *
 recursive-include docs *
 recursive-exclude docs *.pyc
@@ -9,4 +9,3 @@ recursive-exclude tests *.pyc
 recursive-exclude tests *.pyo
 recursive-exclude examples *.pyc
 recursive-exclude examples *.pyo
-
