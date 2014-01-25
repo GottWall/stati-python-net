@@ -9,13 +9,13 @@ stati-python-net is a python client with HTTP & UDP & TCP/IP  transports for `Go
 INSTALLATION
 ------------
 
-To use gottwall  use `pip` or `easy_install`:
+To use gottwall  use `pip` or `easy_install`::
 
-``pip install stati-net``
+  pip install stati-net
 
-or
+or::
 
-``easy_install stati-net``
+  easy_install stati-net
 
 
 USAGE
