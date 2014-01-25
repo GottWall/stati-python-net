@@ -1,5 +1,5 @@
 Welcome to stati-python-net's documentation!
-===========================================
+============================================
 
 stati-python-net is a python client with HTTP & UDP & TCP/IP  transports for `GottWall metrics aggregation platform <http://github.com/GottWall/GottWall>`_
 
