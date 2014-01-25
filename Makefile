@@ -25,7 +25,7 @@ build:
 
 
 release:
-	git tag -f v$(version) && git push --tags
+	git tag -f v$(version) && git push upstream --tags
 	python setup.py sdist upload
 
 clean-pyc:
@@ -38,4 +38,3 @@ clean: clean-pyc
 
 find-print:
 	grep -r --include=*.py --exclude-dir=venv --exclude=fabfile* --exclude=tests.py --exclude-dir=tests --exclude-dir=commands 'print' ./
-
