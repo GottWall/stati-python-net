@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 """
-stati_http
-~~~~~~~~~~~
+stati_net
+~~~~~~~~~
 
 Simple statistics aggregator
 
-HTTP client for GottWall (scalable realtime metrics collecting and aggregation platform and service)
+HTTP & UDP & TCP/IP client for GottWall (scalable realtime metrics collecting and aggregation platform and service)
 
 
 :copyright: (c) 2012 - 2013 by GottWall team, see AUTHORS for more details.
@@ -20,7 +20,7 @@ __maintainer__ = "Alexandr Lispython"
 
 try:
     __version__ = __import__('pkg_resources') \
-        .get_distribution('stati_http').version
+        .get_distribution('stati_net').version
 except Exception, e:
     __version__ = 'unknown'
 
@@ -31,7 +31,8 @@ else:
 __build__ = 0x00005
 
 
-from stati_http.client import Client, HTTPClient
+from stati_net.client import Client
+from stati_net.http import HTTPClient
 
 assert Client
 assert HTTPClient

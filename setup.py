@@ -30,17 +30,11 @@ def run_tests():
     from tests import suite
     return suite()
 
-py_ver = sys.version_info
 
-#: Python 2.x?
-is_py2 = (py_ver[0] == 2)
+install_require = ["requests==2.2.1"]
 
-#: Python 3.x?
-is_py3 = (py_ver[0] == 3)
-
-tests_require = []
-
-install_requires = ["requests"]
+tests_require = ["mock==1.0.1",
+                 "responses==0.2.0"] + install_require
 
 setup(
     name="stati-net",
@@ -53,7 +47,7 @@ setup(
     maintainer_email="alex@obout.ru",
     url="https://github.com/GottWall/stati-python-net",
     packages=["stati_net"],
-    install_requires=install_requires,
+    install_requires=install_require,
     tests_require=tests_require,
     license="BSD",
     platforms = ['Linux', 'Mac'],

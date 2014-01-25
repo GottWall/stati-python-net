@@ -4,14 +4,14 @@
 stati_net.example
 ~~~~~~~~~~~~~~~~~
 
-HTTP client
+UDP client
 
 :copyright: (c) 2012 - 2013 by GottWall team, see AUTHORS for more details.
 :license: BSD, see LICENSE for more details.
 :github: http://github.com/GottWall/stati-python-net
 """
 
-from stati_net import HTTPClient
+from stati_net import UDPClient
 
 private_key = "dwefwefwefwecwef"
 public_key = "my_public_key"
@@ -19,7 +19,7 @@ project = "test_project"
 
 host = "http://127.0.0.1:8890"
 
-cli = HTTPClient(
+cli = UDPClient(
     private_key=private_key,
     public_key=public_key,
     project=project,
