@@ -6,13 +6,12 @@ python:
     - "3.2"
     - "3.3"
 
-
 branches:
     only:
         - master
 
 install:
-    - pip install nose
+    - pip install ipdb
 
 script:
     - make travis

@@ -21,7 +21,7 @@ __maintainer__ = "Alexandr Lispython"
 try:
     __version__ = __import__('pkg_resources') \
         .get_distribution('stati_net').version
-except Exception, e:
+except Exception as e:
     __version__ = 'unknown'
 
 if __version__ == 'unknown':

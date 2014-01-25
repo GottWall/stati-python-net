@@ -2,6 +2,7 @@ ipdb
 
 
 # Profiling
-pycallgraph
+#pycallgraph
 pyprof2calltree==1.1.0
 plop
+tox==1.6.1

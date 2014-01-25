@@ -11,8 +11,8 @@ Unittests for stati
 """
 
 import unittest
-from http import HTTPTestCase
-from client import ClientTestCase
+from .http import HTTPTestCase
+from .client import ClientTestCase
 #from udp import UDPTestCase
 #from tcpip import TCPIPTestCase
 

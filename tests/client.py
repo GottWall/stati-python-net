@@ -11,7 +11,7 @@ Unittests for stati
 """
 import json
 from datetime import datetime
-from base import BaseTestCase
+from .base import BaseTestCase
 
 private_key = "gottwall_privatekey"
 public_key = "project_public_key"
@@ -37,9 +37,9 @@ class ClientTestCase(BaseTestCase):
         serialized_data = client.serialize(data['name'], data['timestamp'], data['value'], data['filters'])
 
         decoded_data = json.loads(serialized_data)
-        self.assertEquals(client.dt_to_ts(data.get('timestamp')),
+        self.assertEqual(client.dt_to_ts(data.get('timestamp')),
                           decoded_data.get('ts'))
 
-        self.assertEquals(data['name'], decoded_data['n'])
-        self.assertEquals(data['value'], decoded_data['v'])
-        self.assertEquals(data['filters'], decoded_data['f'])
+        self.assertEqual(data['name'], decoded_data['n'])
+        self.assertEqual(data['value'], decoded_data['v'])
+        self.assertEqual(data['filters'], decoded_data['f'])
