@@ -16,6 +16,7 @@ from datetime import datetime
 
 from .base import BaseTestCase
 from stati_net import Client
+from stati_net.client import utf8
 
 
 private_key = "gottwall_privatekey"
@@ -58,7 +59,6 @@ class ClientTestCase(BaseTestCase):
         client = self.client
 
         ts = client.dt_to_ts(datetime.now())
-        self.assertEquals(client.make_sign(ts), hmac.new(key=client._private_key,
-                                                    msg=client.sign_msg(ts),
+        self.assertEquals(client.make_sign(ts), hmac.new(key=utf8(client._private_key),
+                                                    msg=utf8(client.sign_msg(ts)),
                                                     digestmod=hashlib.md5).hexdigest())
-

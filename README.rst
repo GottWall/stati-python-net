@@ -21,9 +21,12 @@ or::
 USAGE
 -----
 
+HTTPClient
+^^^^^^^^^^
 
 .. sourcecode:: python
 
+   # HTTPClient
    from stati_net import HTTPClient
 
    private_key = "gottwall_privatekey"
@@ -39,7 +42,31 @@ USAGE
        host=host,
        prefix=None)
 
-   cli.incr(metric="orders", value=2, filters={"status": ["Completed", "Waiting"]})
+   cli.incr(name="orders", value=2, filters={"status": ["Completed", "Waiting"]})
+
+
+TCP/IP Client
+^^^^^^^^^^^^^
+
+.. sourcecode:: python
+
+   # TCP/IP Client
+   from stati_net import TCPIPClient
+
+   private_key = "gottwall_privatekey"
+   public_key = "project_public_key"
+   project = "test_gottwall_project"
+   host = "127.0.0.1"
+   port = 8097
+   client = TCPIPClient(project=project,
+                        private_key=private_key,
+						public_key=public_key,
+                        host=host, port=port,
+						auth_delimiter="--stream-auth--",
+						chunk_delimiter="--chunk--")
+
+   cli.incr(name="orders", value=2, filters={"status": ["Completed", "Waiting"]})
+
 
 
 
