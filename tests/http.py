@@ -23,7 +23,7 @@ class HTTPTestCase(BaseTestCase):
     private_key = "gottwall_pricatekey"
     public_key = "project_public_key"
     project = "test_gottwall_project"
-    host = "http://127.0.0.1"
+    host = "127.0.0.1"
     port = 8888
     prefix = "/gottwall"
 
@@ -32,19 +32,17 @@ class HTTPTestCase(BaseTestCase):
 
     def setUp(self):
         self.client = HTTPClient(self.project, self.private_key, self.public_key,
-                            host=self.host, port=self.port, prefix=self.prefix)
+                            host=self.host, port=self.port, prefix=self.prefix,
+                            proto="https")
 
 
     def test_init(self):
         client = self.client
 
 
-        self.assertEqual(client.get_url("incr"), "{host}:{port}{prefix}/api/v1/{project}/{action}".format(
-            project=self.project,  host=self.host, port=self.port, prefix=self.prefix, action='incr'))
+        self.assertEqual(client.get_url("incr"), "{proto}://{host}:{port}{prefix}/api/v1/{project}/{action}".format(
+            project=self.project,  host=self.host, port=self.port, prefix=self.prefix, action='incr', proto="https"))
 
-        self.assertEqual(client.headers['X-GottWall-Auth'],
-                          "GottWall private_key={0}, public_key={1}".format(
-                              self.private_key, self.public_key))
 
         data = self.test_data
 
@@ -67,3 +65,9 @@ class HTTPTestCase(BaseTestCase):
 
         self.assertTrue(client.incr(**self.test_data))
         self.assertFalse(client.decr(**self.test_data))
+
+    def test_headers(self):
+        client = self.client
+
+        ts = client.dt_to_ts(datetime.utcnow())
+        self.assertEqual(client.auth_header, "GottWallS1 {0} {1} {2}".format(ts, client.make_sign(ts), client._solt_base))

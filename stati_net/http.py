@@ -11,10 +11,11 @@ Client for GottWall
 :github: http://github.com/GottWall/stati-python-net
 """
 import logging
-import datetime
+from datetime import datetime
 import requests
 
 from stati_net.client import Client
+import hmac
 
 logger = logging.getLogger('stati')
 
@@ -24,23 +25,29 @@ class HTTPClient(Client):
     """
 
     def __init__(self, project, private_key, public_key,
-                 host='http://127.0.0.1', prefix='/gottwall', port=80):
-        super(HTTPClient, self).__init__(project, private_key, public_key)
-        self._host = host
-        self._port = port
-        self.prefix = prefix
+                 host='http://127.0.0.1', prefix='/gottwall', port=80,
+                 proto="http", secure_auth=False, solt_base=1000):
+        super(HTTPClient, self).__init__(project, private_key, public_key, solt_base)
+        self.host, self.port, self.proto, self.prefix = host, port, proto, prefix
+        self._secure_auth = secure_auth
+        self._auth_header = None
+
 
     def get_url(self, action):
-        return "{host}:{port}{prefix}/api/v1/{project}/{action}".format(
+        return "{proto}://{host}:{port}{prefix}/api/v1/{project}/{action}".format(
             action=action, project=self._project,
-            prefix=self.prefix if self.prefix else '/',
-            host=self._host, port=self._port)
+            prefix=self.prefix or '', host=self.host, port=self.port,
+            proto=self.proto or 'http')
 
     @property
     def headers(self):
         return {"Content-Type": "application/json",
-                "X-GottWall-Auth": "GottWall private_key={0}, public_key={1}".format(
-                    self._private_key, self._public_key)}
+                "X-GottWall-Auth": self.auth_header}
+
+    @property
+    def auth_header(self):
+        ts = self.dt_to_ts(datetime.utcnow())
+        return "GottWallS1 {0} {1} {2}".format(ts, self.make_sign(ts), self._solt_base)
 
     def request(self, action, name, timestamp=None, value=1, filters={}):
         """Make request to api
@@ -53,7 +60,7 @@ class HTTPClient(Client):
         :return: request result
         """
 
-        timestamp = timestamp or datetime.datetime.utcnow()
+        timestamp = timestamp or datetime.utcnow()
 
         try:
             return requests.post(self.get_url(action), data=self.serialize(name, timestamp, value, filters),
