@@ -62,10 +62,35 @@ TCP/IP Client
                         private_key=private_key,
 						public_key=public_key,
                         host=host, port=port,
-						auth_delimiter="--stream-auth--",
-						chunk_delimiter="--chunk--")
+						auth_delimiter="--stream-auth--", #optional
+						chunk_delimiter="--chunk--") #optional
 
    cli.incr(name="orders", value=2, filters={"status": ["Completed", "Waiting"]})
+
+
+UDP Client
+^^^^^^^^^^
+
+.. sourcecode:: python
+
+   # UDP client
+   from stati_net import UDPClient
+
+   private_key = "gottwall_privatekey"
+   public_key = "project_public_key"
+   project = "test_gottwall_project"
+   host = "127.0.0.1"
+   port = 8097
+   client = UDPClient(project=project,
+                      private_key=private_key,
+					  public_key=public_key,
+                      host=host, port=port,
+				      auth_delimiter="--stream-auth--", #optional
+					  chunk_delimiter="--chunk--", #optional
+				      max_packet_size=1024) #optional
+
+   cli.incr(name="orders", value=2, filters={"status": ["Completed", "Waiting"]})
+
 
 
 

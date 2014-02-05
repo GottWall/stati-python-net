@@ -34,11 +34,12 @@ __build__ = 0x00005
 from stati_net.client import Client
 from stati_net.http import HTTPClient
 from stati_net.tcpip import TCPIPClient
+from stati_net.udp import UDPClient
 
 assert Client
 assert HTTPClient
 assert TCPIPClient
-
+assert UDPClient
 
 def get_version():
     return __version__
