@@ -56,11 +56,12 @@ class UDPClient(Client):
 
         """
         return json.dumps({"p": self._project,
-                            "auth": self.auth_header,
-                            "ts": self.dt_to_ts(timestamp),
-                            "a": action,
-                            "v": value,
-                            "f": filters})
+                           "n": name,
+                           "auth": self.auth_header,
+                           "ts": self.dt_to_ts(timestamp),
+                           "a": action,
+                           "v": value,
+                           "f": filters})
 
 
     def request(self, action, name, timestamp=None, value=1, filters={}):
@@ -112,7 +113,7 @@ class UDPClient(Client):
                 raise RuntimeError("Invalid body size")
 
             socket.sendto(body, (self.host, self.port))
-        except Exception, e:
+        except Exception as e:
             logger.error(e)
 
     def is_valid_body(self, data):
