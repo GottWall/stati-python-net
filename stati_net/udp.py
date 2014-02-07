@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-stati.client
-~~~~~~~~~~~~
+stati.client.udp
+~~~~~~~~~~~~~~~~
 
-TCP/IP client for GottWall
+UDP client for GottWall
 
 :copyright: (c) 2012 - 2014  by GottWall team, see AUTHORS for more details.
 :license: BSD, see LICENSE for more details.
@@ -16,6 +16,7 @@ from datetime import datetime
 
 from stati_net.client import Client
 
+
 try:
     import ujson as json
 except Exception:
@@ -25,21 +26,23 @@ except Exception:
 logger = logging.getLogger('stati')
 
 
-class TCPIPClient(Client):
-    """GottWall client to send data via custom TCP/IP protocol
+class UDPClient(Client):
+    """GottWall client to send data via UDP
     """
+    sock = None
 
     def __init__(self, project, private_key, public_key,
-                 host='127.0.0.1', port=8097, solt_base=1000,
+                 host='127.0.0.1', port=80, solt_base=1000,
                  timeout=socket._GLOBAL_DEFAULT_TIMEOUT,
+                 max_packet_size=1024,
                  auth_delimiter="--stream-auth--", chunk_delimiter="--chunk--"):
-        super(TCPIPClient, self).__init__(project, private_key, public_key, solt_base)
+        super(UDPClient, self).__init__(project, private_key, public_key, solt_base)
         self.host, self.port = host, port
         self.timeout = timeout
         self.authenticated = False
+        self._max_packet_size = max_packet_size
         self.auth_delimiter = auth_delimiter
         self.chunk_delimiter = chunk_delimiter
-        self.sock = None
 
     @property
     def auth_header(self):
@@ -78,8 +81,7 @@ class TCPIPClient(Client):
             auth = self.auth_header
             self.send_bucket(auth, self.serialize(auth, action, name, timestamp, value, filters))
         except Exception as e:
-            print(e)
-            #logger.error(e)
+            logger.error(e)
             return False
         return True
 
@@ -89,41 +91,33 @@ class TCPIPClient(Client):
     def decr(self, *args, **kwargs):
         return self.request('decr', *args, **kwargs)
 
-    def connect(self):
-        sock = socket.create_connection((self.host, self.port), self.timeout)
-        sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-        return sock
+    def make_chunk(self, auth, data):
+        """Make chunk with auth from given parameters
 
-    @property
-    def connection(self):
+        :param auth:
+        :param data:
+        """
+        return auth + self.auth_delimiter + data + self.chunk_delimiter
+
+    def socket(self):
         if not self.sock:
-            self.sock = self.connect()
+            self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         return self.sock
 
     def send_bucket(self, auth, data):
         try:
-            if not self.authenticated:
-                self.authenticate_connection(auth)
-            self.connection.send(data + self.chunk_delimiter)
+            socket = self.socket()
+            body = self.make_chunk(auth, data)
+
+            if not self.is_valid_body(body):
+                raise RuntimeError("Invalid body size")
+
+            socket.sendto(body, (self.host, self.port))
         except Exception as e:
-            print(e)
+            logger.error(e)
 
-    def authenticate_connection(self, auth):
-        """Authenticate connection
-        """
-        if not self.sock:
-            self.sock = self.connect()
-            # Every new connection not authenticated
-            self.authenticated = False
-
-        if not self.authenticated:
-            self.sock.send(auth + self.auth_delimiter)
-
-            resp = self.sock.recv(2)
-
-            if resp == "OK":
-                self.authenticated = True
-                return True
-            raise RuntimeError("Can't authenticate connection")
-
+    def is_valid_body(self, data):
+        if len(data) > self._max_packet_size:
+            raise RuntimeError("The maximum size is exceeded: {0} > {1}".format(
+                len(data), self._max_packet_size))
         return True

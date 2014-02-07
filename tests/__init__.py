@@ -20,15 +20,17 @@ import socket
 
 from .http import HTTPTestCase
 from .client import ClientTestCase
-#from udp import UDPTestCase
+from .udp import UDPTestCase
 from .tcpip import TCPIPTestCase
 
 def suite():
     suite = unittest.TestSuite()
+
     suite.addTest(unittest.makeSuite(HTTPTestCase))
     suite.addTest(unittest.makeSuite(ClientTestCase))
-    #suite.addTest(unittest.makeSuite(UDPTestCase))
     suite.addTest(unittest.makeSuite(TCPIPTestCase))
+    suite.addTest(unittest.makeSuite(UDPTestCase))
+
     return suite
 
 if __name__ == '__main__':

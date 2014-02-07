@@ -60,5 +60,5 @@ class ClientTestCase(BaseTestCase):
 
         ts = client.dt_to_ts(datetime.now())
         self.assertEquals(client.make_sign(ts), hmac.new(key=utf8(client._private_key),
-                                                    msg=utf8(client.sign_msg(ts)),
-                                                    digestmod=hashlib.md5).hexdigest())
+                                                         msg=utf8(client.sign_msg(ts)),
+                                                         digestmod=hashlib.md5).hexdigest())

@@ -13,14 +13,14 @@ from mock import Mock, patch
 import json
 from datetime import datetime
 from .base import BaseTestCase
-from stati_net import TCPIPClient
+from stati_net import UDPClient
 import responses
 from six import b
 
 import socket
 
 
-class TCPIPTestCase(BaseTestCase):
+class UDPTestCase(BaseTestCase):
 
     project = "test_gottwall_project"
     private_key = "gottwall_pricatekey"
@@ -36,10 +36,10 @@ class TCPIPTestCase(BaseTestCase):
                  "action": "incr"}
 
     def setUp(self):
-        self.client = TCPIPClient(self.project, self.private_key, self.public_key,
-                            host=self.host, port=self.port,
-                            auth_delimiter=self.auth_delimiter,
-                            chunk_delimiter=self.chunk_delimiter)
+        self.client = UDPClient(self.project, self.private_key, self.public_key,
+                                host=self.host, port=self.port,
+                                auth_delimiter=self.auth_delimiter,
+                                chunk_delimiter=self.chunk_delimiter)
 
     def test_init(self):
         client = self.client
@@ -52,7 +52,6 @@ class TCPIPTestCase(BaseTestCase):
         decoded_data = json.loads(serialized_data)
         self.assertEqual(client.dt_to_ts(data.get('timestamp')),
                           decoded_data['ts'])
-
         self.assertEqual(data['name'], decoded_data['n'])
         self.assertEqual(data['value'], decoded_data['v'])
         self.assertEqual(data['filters'], decoded_data['f'])
@@ -66,43 +65,16 @@ class TCPIPTestCase(BaseTestCase):
         self.assertEqual(client.auth_header, "GottWallS2 {0} {1} {2} {3}".format(
             ts, client.make_sign(ts), client._solt_base, self.project))
 
-
-    def test_connect(self):
-
+    def test_make_chunk(self):
         client = self.client
+        data = self.test_data
+        auth = client.auth_header
+        serialized_data = client.serialize(auth, data["action"],
+                                           data['name'], data['timestamp'], data['value'],
+                                           data['filters'])
+        self.assertEqual(auth + client.auth_delimiter + serialized_data + client.chunk_delimiter,
+                         client.make_chunk(auth, serialized_data))
 
-        with patch.object(TCPIPClient, "connect") as connect:
-            sock = client.connect()
-            self.assertTrue(connect.called)
-
-
-    def test_fail_authentication(self):
-
-        client = self.client
-        auth_header = client.auth_header
-
-        with patch.object(client, "connect") as connect:
-
-            auth_header = client.auth_header
-            self.assertRaises(RuntimeError, client.authenticate_connection, auth_header)
-            self.assertTrue(connect.called)
-
-    def test_ok_authentication(self):
-
-        client = self.client
-        auth_header = client.auth_header
-
-        with patch.object(client, "connect") as connect:
-            class Connection(object):
-                def send(self, data):
-                    return True
-
-                def recv(self, num):
-                    return "OK"
-
-            connect.return_value = Connection()
-            self.assertTrue(client.authenticate_connection(auth_header))
-            self.assertTrue(connect.called)
 
 
     def test_send_bucket(self):
@@ -111,7 +83,10 @@ class TCPIPTestCase(BaseTestCase):
         auth_header = client.auth_header
 
         client.sock = Mock()
-        client.send_bucket(auth_header, "test_data")
+        client.sock.sendto = Mock()
 
-        self.assertEquals(client.sock.send.call_args_list[0][0][0],
-                          "test_data" + client.chunk_delimiter)
+        client.send_bucket(auth_header, "test_data")
+        call_args = client.sock.sendto.call_args_list[0][0]
+
+        self.assertEquals(call_args[0], client.make_chunk(auth_header, "test_data"))
+        self.assertEquals(call_args[1], (client.host, client.port))
